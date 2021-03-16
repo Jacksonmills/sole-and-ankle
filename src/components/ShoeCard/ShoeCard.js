@@ -36,6 +36,7 @@ const ShoeCard = ({
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          <Pill variant={variant}>{variant}</Pill>
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
@@ -44,6 +45,7 @@ const ShoeCard = ({
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          <SalePrice>{formatPrice(price)}</SalePrice>
         </Row>
       </Wrapper>
     </Link>
@@ -53,29 +55,53 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
+  min-width: 340px;
+  flex: 1 1 340px;
+  transition: filter 100ms ease-in;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
 `;
 
-const Wrapper = styled.article``;
+const Wrapper = styled.article`
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+  border-radius: 16px 16px 4px 4px;
+`;
+
+const Pill = styled.span`
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  padding: 7px 12px;
+  background-color: ${COLORS.secondary};
+  border-radius: 2px;
+  color: ${COLORS.white};
+`;
 
 const Row = styled.div`
+  display: flex;
   font-size: 1rem;
 `;
 
 const Name = styled.h3`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.gray[900]};
+  margin-right: auto;
 `;
 
 const Price = styled.span``;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
+  margin-right: auto;
 `;
 
 const SalePrice = styled.span`
