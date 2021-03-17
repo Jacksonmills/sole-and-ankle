@@ -31,21 +31,31 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+  const hasFlag = variant === 'on-sale' || variant === 'new-release';
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
-          <Pill variant={variant}>{variant}</Pill>
+          {variant === 'on-sale' && <SalePill>Sale</SalePill>}
+          {variant === 'new-release' && <NewPill>Just Released!</NewPill>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price
+            style={{
+              '--color': variant === 'on-sale' ? COLORS.gray[700] : undefined,
+              '--text-decoration': variant === 'on-sale' ? 'line-through' : undefined,
+            }}
+          >
+            {formatPrice(price)}
+          </Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
-          <SalePrice>{formatPrice(price)}</SalePrice>
+          {variant === 'on-sale' && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
       </Wrapper>
     </Link>
@@ -55,13 +65,6 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
-  min-width: 340px;
-  flex: 1 1 340px;
-  transition: filter 100ms ease-in;
-
-  &:hover {
-    filter: brightness(0.95);
-  }
 `;
 
 const Wrapper = styled.article`
@@ -76,32 +79,45 @@ const Image = styled.img`
   border-radius: 16px 16px 4px 4px;
 `;
 
-const Pill = styled.span`
+const Pill = styled.div`
   position: absolute;
   top: 12px;
   right: -4px;
-  padding: 7px 12px;
-  background-color: ${COLORS.secondary};
+  height: 32px;
+  line-height: 32px;
+  padding: 0 10px;
+  font-size: ${14 / 16}rem;
+  font-weight: ${WEIGHTS.bold};
   border-radius: 2px;
   color: ${COLORS.white};
 `;
 
+const SalePill = styled(Pill)`
+  background-color: ${COLORS.primary};
+`;
+
+const NewPill = styled(Pill)`
+  background-color: ${COLORS.secondary};
+`;
+
 const Row = styled.div`
   display: flex;
+  justify-content: space-between;
   font-size: 1rem;
 `;
 
 const Name = styled.h3`
   font-weight: ${WEIGHTS.medium};
   color: ${COLORS.gray[900]};
-  margin-right: auto;
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: var(--color);
+  text-decoration: var(--text-decoration);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
-  margin-right: auto;
 `;
 
 const SalePrice = styled.span`
